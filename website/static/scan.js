@@ -14,20 +14,32 @@ async function startVideo() {
         canvas.height = video.videoHeight;
     });
 
-    video.addEventListener('timeupdate', async () => {
-        const tempCanvas = document.createElement('canvas');
-        const tempContext = tempCanvas.getContext('2d');
-        tempCanvas.width = video.videoWidth;
-        tempCanvas.height = video.videoHeight;
-        tempContext.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
-        const frameData = tempContext.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
-        context.putImageData(frameData, 0, 0);
+    function checkForQRCode() {
+            $.ajax({
+                url: '/video_feed',
+                type: 'POST',
+                success: function(response) {
+                    if (response.found_qr_code) {
+                        // Extract the QR code information
+                        let qrInfo = response.qr_data;
 
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'));
-        const response = await fetch('/video_feed', { method: 'POST', body: blob });
-        const processedImage = await response.blob();
-        const processedUrl = URL.createObjectURL(processedImage);
-        document.getElementById('processed').src = processedUrl;
-        //alert(response.json());
-    });
+                        // Display the QR code information in the modal
+                        $('#qrInfo').text(qrInfo);
+
+                        // Show the modal
+                        $('#qrModal').modal('show');
+                    } else {
+                        // Retry after a delay if no QR code is found
+                        setTimeout(checkForQRCode, 1000);
+                    }
+                },
+                error: function() {
+                    // Retry after a delay in case of an error
+                    setTimeout(checkForQRCode, 1000);
+                }
+            });
+        }
+
+        // Start checking for QR codes
+        checkForQRCode();
 }

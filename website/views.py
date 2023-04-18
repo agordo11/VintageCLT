@@ -17,21 +17,20 @@ def home():
 @views.route('/video_feed', methods=['POST'])
 def video_feed():
     cap = cv2.VideoCapture(0)
-    #cool
+
     while True:
         success, frame = cap.read()
         if not success:
             break
+
         codes = decode(frame)
-        print(codes)
-        # Flip the frame vertically
-        flipped_frame = cv2.flip(frame, 0)
+        if codes:
+            print("QR code(s) found:", codes)
+            cap.release()
+            return jsonify({"found_qr_code": True, "qr_data": str(codes[0].data)})
 
-        # Encode the processed frame to JPEG format
-        ret, buffer = cv2.imencode('.jpg', flipped_frame)
-
-        # Convert the buffer to bytes and yield as a frame
-        return Response(buffer.tobytes(), content_type='image/jpeg')
+    cap.release()
+    return jsonify({"found_qr_code": False})
 
 
 @views.route('/scan', methods=['POST'])
