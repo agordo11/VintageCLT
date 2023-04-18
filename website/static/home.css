@@ -30,7 +30,7 @@ body {
 
 .custom-background::before {
     content: '';
-    background-image: url('{{ url_for("static", filename="your-image.jpg") }}');
+    background-image: url('{{ url_for("static", filename="background.jpeg") }}');
     background-size: cover;
     background-position: center center;
     opacity: 0.5; /* Adjust the opacity value here */
