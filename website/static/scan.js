@@ -15,6 +15,9 @@ async function startVideo() {
     });
 
     function checkForQRCode() {
+        console.log('dataURL:', dataURL);
+        console.log('imageData:', imageData);
+
         $.ajax({
             url: '/video_feed',
             type: 'POST',
