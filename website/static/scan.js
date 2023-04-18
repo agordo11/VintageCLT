@@ -15,31 +15,41 @@ async function startVideo() {
     });
 
     function checkForQRCode() {
-            $.ajax({
-                url: '/video_feed',
-                type: 'POST',
-                success: function(response) {
-                    if (response.found_qr_code) {
-                        // Extract the QR code information
-                        let qrInfo = response.qr_data;
+        $.ajax({
+            url: '/video_feed',
+            type: 'POST',
+            success: function(response) {
+                if (response.found_qr_code) {
+                    // Extract the QR code information
+                    let qrInfo = response.qr_data;
 
-                        // Display the QR code information in the modal
-                        $('#qrInfo').text(qrInfo);
+                    // Display the QR code information in the modal
+                    $('#qrInfo').text(qrInfo);
 
-                        // Show the modal
-                        $('#qrModal').modal('show');
-                    } else {
-                        // Retry after a delay if no QR code is found
-                        setTimeout(checkForQRCode, 1000);
-                    }
-                },
-                error: function() {
-                    // Retry after a delay in case of an error
+                    // Show the modal
+                    $('#qrModal').modal('show');
+                } else {
+                    // Retry after a delay if no QR code is found
                     setTimeout(checkForQRCode, 1000);
                 }
-            });
-        }
+            },
+            error: function() {
+                // Retry after a delay in case of an error
+                setTimeout(checkForQRCode, 1000);
+            }
+        });
+    }
 
-        // Start checking for QR codes
-        checkForQRCode();
+    navigator.mediaDevices.getUserMedia({video: true})
+        .then(function(stream) {
+            const video = document.getElementById('video');
+            video.srcObject = stream;
+            video.play();
+
+            // Start checking for QR codes after the video starts playing
+            video.addEventListener('canplay', checkForQRCode, false);
+        })
+        .catch(function(err) {
+            console.error('An error occurred: ', err);
+        });
 }

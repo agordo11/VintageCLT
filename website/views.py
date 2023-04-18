@@ -14,59 +14,26 @@ def home():
     return render_template('home.html')
 
 
+import base64
+import numpy as np
+from flask import request, jsonify
+
+
 @views.route('/video_feed', methods=['POST'])
 def video_feed():
-    cap = cv2.VideoCapture(0)
+    # Decode the base64-encoded image
+    image_data = base64.b64decode(request.json['image'])
 
-    while True:
-        success, frame = cap.read()
-        if not success:
-            break
+    # Convert the image data to a NumPy array and decode it into an OpenCV frame
+    image_array = np.frombuffer(image_data, dtype=np.uint8)
+    frame = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
 
-        codes = decode(frame)
-        if codes:
-            print("QR code(s) found:", codes)
-            cap.release()
-            return jsonify({"found_qr_code": True, "qr_data": str(codes[0].data)})
-
-    cap.release()
-    return jsonify({"found_qr_code": False})
-
-
-@views.route('/scan', methods=['POST'])
-def scan_qr_code():
-    # Get image data from the request
-    image_data = request.form['image']
-    image_data = base64.b64decode(image_data)
-
-    # Convert image data to a numpy array
-    np_arr = np.frombuffer(image_data, np.uint8)
-
-    # Decode the image and find QR codes
-    image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-    codes = decode(image)
-
-    # Extract the decoded data
-    decoded_data = []
-    for code in codes:
-        decoded_data.append(code.data.decode('utf-8'))
-
-    return jsonify('success')
+    codes = decode(frame)
+    if codes:
+        print("QR code(s) found:", codes)
+        return jsonify({"found_qr_code": True, "qr_data": str(codes[0].data)})
+    else:
+        print("No QR code found")
+        # return jsonify({"found_qr_code": False})
 
 
-
-@views.route('/process_frame', methods=['POST'])
-def process_frame():
-    # Receive and decode the frame
-    frame_data = request.data
-    nparr = np.frombuffer(frame_data, np.uint8)
-    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
-    # Process the frame (e.g., convert to grayscale)
-    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-    # Encode the processed frame
-    ret, buffer = cv2.imencode('.jpg', gray_frame)
-
-    # Return the processed frame
-    return Response(buffer.tobytes(), content_type='image/jpeg')
