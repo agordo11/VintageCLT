@@ -15,12 +15,15 @@ async function startVideo() {
     });
 
     function checkForQRCode() {
-        console.log('dataURL:', dataURL);
-        console.log('imageData:', imageData);
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataURL = canvas.toDataURL('image/jpeg');
+        const imageData = dataURL.split(',')[1];
 
         $.ajax({
             url: '/video_feed',
             type: 'POST',
+            data: JSON.stringify({ image: imageData }),
+            contentType: 'application/json',
             success: function(response) {
                 if (response.found_qr_code) {
                     // Extract the QR code information
@@ -43,16 +46,8 @@ async function startVideo() {
         });
     }
 
-    navigator.mediaDevices.getUserMedia({video: true})
-        .then(function(stream) {
-            const video = document.getElementById('video');
-            video.srcObject = stream;
-            video.play();
-
-            // Start checking for QR codes after the video starts playing
-            video.addEventListener('canplay', checkForQRCode, false);
-        })
-        .catch(function(err) {
-            console.error('An error occurred: ', err);
-        });
+    // Start checking for QR codes after the video starts playing
+    video.addEventListener('canplay', checkForQRCode, false);
 }
+
+startVideo(); // Call startVideo() to initialize the video stream and QR code checking
