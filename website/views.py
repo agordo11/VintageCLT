@@ -17,7 +17,7 @@ def home():
 @views.route('/video_feed', methods=['POST'])
 def video_feed():
     cap = cv2.VideoCapture(0)
-
+    #cool
     while True:
         success, frame = cap.read()
         if not success:
