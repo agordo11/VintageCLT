@@ -23,5 +23,14 @@ body {
     max-width: 500px;
 }
 
+.bg-navy {
+    background-color: #1c2c4c;
+}
 
+.video-container {
+    display: flex;
+    justify-content: center;
+    width: 75%; /* Set the width to 75% */
+    margin: 0 auto; /* Center the container */
+}
 
