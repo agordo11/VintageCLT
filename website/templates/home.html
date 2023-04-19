@@ -51,14 +51,28 @@
 </head>
 
 <body onload="startVideo()" class="custom-background">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-navy">
-        <a class="navbar-brand" href="#">The Vintage</a>
-        <h1 class="header-text text-center w-100">Welcome to <b>The Vintage</b></h1>
-    </nav>
     <div class="container">
         <div class="row">
             <div class="video-container w-100">
                 <video id="video" autoplay></video>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Secondary Check: Phone Number</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="phone-check-form">
+                            <div class="form-group">
+                                <label for="phone-number">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone-number" name="phone-number" placeholder="Enter your phone number" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
