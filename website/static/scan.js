@@ -51,3 +51,9 @@ async function startVideo() {
 }
 
 startVideo(); // Call startVideo() to initialize the video stream and QR code checking
+
+$(document).ready(function () {
+    $('#close-button').on('click', function () {
+        location.reload();
+    });
+});
