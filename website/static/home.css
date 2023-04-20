@@ -34,3 +34,28 @@ body {
     margin: 0 auto; /* Center the container */
 }
 
+/* Elegant ID Card inspired modal */
+.elegant-modal {
+    background-color: #1c2c4c; /* Dark blue background color from the logo */
+    border-radius: 15px; /* Rounded corners */
+    padding: 20px; /* Padding for the modal content */
+}
+
+/* Modal title styling */
+.elegant-modal .modal-title {
+    color: #ffffff; /* White color for the title */
+    font-weight: bold; /* Bold font weight for the title */
+}
+
+/* Modal body styling */
+.elegant-modal .modal-body {
+    color: #ffffff; /* White color for the body text */
+    font-size: 18px; /* Larger font size for the body text */
+}
+
+/* Modal close button styling */
+.elegant-modal .btn-secondary {
+    background-color: #ffffff; /* White background color for the close button */
+    color: #1c2c4c; /* Dark blue text color for the close button */
+    font-weight: bold; /* Bold font weight for the close button */
+}
