@@ -60,6 +60,6 @@ $(document).ready(function () {
 
 $(document).ready(function() {
     $('#exampleModalCenter').on('hidden.bs.modal', function () {
-      location.reload();
+        location.reload();
     });
 });
