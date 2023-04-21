@@ -33,7 +33,7 @@ async function startVideo() {
                     $('#qrInfo').text(qrInfo);
 
                     // Show the modal
-                    $('#qrModal').modal('show');
+                    $('#exampleModalCenter').modal('show');
                 } else {
                     // Retry after a delay if no QR code is found
                     setTimeout(checkForQRCode, 1000);
