@@ -57,3 +57,9 @@ $(document).ready(function () {
         location.reload();
     });
 });
+
+$(document).ready(function() {
+    $('#exampleModalCenter').on('hidden.bs.modal', function () {
+      location.reload();
+    });
+});
